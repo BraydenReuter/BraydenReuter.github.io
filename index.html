@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brayden Reuter · Software Engineer</title>
+<meta name="description" content="Brayden Reuter: Computer Science student at Randolph College (May 2027) focused on software engineering and cloud infrastructure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  body.intro { overflow: hidden; }
+  .enc { color: rgba(61,220,151,.55) !important; text-shadow: 0 0 8px rgba(61,220,151,.35); }
+  .grad.enc, .enc .grad { background: none; -webkit-background-clip: border-box; background-clip: border-box; }
+  .avatar.enc-img { filter: blur(14px) saturate(0) brightness(.7); }
+
+  #boot {
+    position: fixed; inset: 0; z-index: 60; background: var(--bg);
+    display: grid; place-items: center; font-family: var(--mono); font-size: 14px; color: var(--muted);
+    transition: opacity .4s;
+  }
+  #boot.hide { opacity: 0; pointer-events: none; }
+  #boot .box { width: min(460px, calc(100% - 40px)); line-height: 1.9; }
+  #boot .cmd { color: var(--text); } #boot .ok { color: var(--green); }
+  #boot .bar { height: 3px; background: #1f2a3a; border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  #boot .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--cyan), var(--green)); }
+
+  #scan {
+    position: fixed; left: 0; right: 0; top: 0; height: 2px; z-index: 55; pointer-events: none; opacity: 0;
+    background: var(--green);
+    box-shadow: 0 0 18px 3px rgba(61,220,151,.7);
+  }
+  #scan::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 120px;
+    background: linear-gradient(to top, rgba(61,220,151,.14), transparent);
+  }
+
+  .pill {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 60;
+    font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap;
+    background: rgba(13,17,23,.95); border: 1px solid #2a3647; border-radius: 999px; padding: 8px 16px;
+    transition: opacity .5s, transform .5s;
+  }
+  .pill b { color: var(--green); font-weight: 600; }
+  .pill.hide { opacity: 0; transform: translate(-50%, 20px); }
+</style>
+</head>
+<body class="intro">
+<div id="site"></div>
+<div id="scan"></div>
+<div id="boot"><div class="box" id="bootbox"></div></div>
+<div class="pill hide" id="pill">decrypting… <b id="pct">0%</b></div>
+
+<button class="intro-btn skip" id="skip">skip intro ⏭</button>
+<button class="intro-btn replay" id="replay">↻ replay intro</button>
+
+<script src="assets/content.js"></script>
+<script src="assets/party.js"></script>
+<script>
+renderSite(document.getElementById('site'));
+
+const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*+=<>/\\[]{}?!';
+const rnd = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
+const site = document.getElementById('site');
+const boot = document.getElementById('boot');
+const bootbox = document.getElementById('bootbox');
+const scan = document.getElementById('scan');
+const pill = document.getElementById('pill');
+const pct = document.getElementById('pct');
+const skipBtn = document.getElementById('skip');
+const replayBtn = document.getElementById('replay');
+
+// ---- collect every text node into a scrambler ----
+const scramblers = [];
+const byEl = new Map();
+const walker = document.createTreeWalker(site, NodeFilter.SHOW_TEXT, {
+  acceptNode: (n) => n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT,
+});
+for (let n; (n = walker.nextNode());) {
+  const s = { node: n, orig: n.nodeValue, res: new Float64Array(n.nodeValue.length).fill(Infinity), el: n.parentElement, done: false };
+  scramblers.push(s);
+  if (!byEl.has(s.el)) byEl.set(s.el, []);
+  byEl.get(s.el).push(s);
+}
+
+function scrambleAll() {
+  scramblers.forEach((s) => { s.res.fill(Infinity); s.done = false; s.el.classList.add('enc'); });
+  document.querySelector('.avatar').classList.add('enc-img');
+}
+
+function trigger(s, now, spread = 700) {
+  if (s.res[0] !== Infinity && s.done) return;
+  for (let i = 0; i < s.res.length; i++) s.res[i] = now + Math.random() * spread + Math.min(i * 6, 500);
+  s.done = false;
+}
+
+let lastGlyph = 0;
+function render(now) {
+  const swap = now - lastGlyph > 45;
+  if (swap) lastGlyph = now;
+  for (const s of scramblers) {
+    if (s.done) continue;
+    if (!swap) continue;
+    let out = '', allDone = true;
+    for (let i = 0; i < s.orig.length; i++) {
+      const ch = s.orig[i];
+      if (ch === ' ' || ch === '\n' || now >= s.res[i]) out += ch;
+      else { out += rnd(); allDone = false; }
+    }
+    s.node.nodeValue = out;
+    if (allDone) {
+      s.done = true;
+      if (byEl.get(s.el).every((x) => x.done)) s.el.classList.remove('enc');
+    }
+  }
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// scroll-triggered decrypt for anything below the fold
+const io = new IntersectionObserver((entries) => {
+  if (document.body.classList.contains('intro')) return;
+  const now = performance.now();
+  entries.forEach((e) => { if (e.isIntersecting) (byEl.get(e.target) || []).forEach((s) => { if (s.res[0] === Infinity) trigger(s, now, 500); }); });
+}, { threshold: 0.2 });
+byEl.forEach((_, el) => io.observe(el));
+
+// hover re-scramble on headings, buttons and chips
+site.addEventListener('mouseover', (e) => {
+  if (document.body.classList.contains('intro')) return;
+  const el = e.target.closest('h1, h2, h3, .btn, .chip, .logo, .nav-links a');
+  if (!el || el.dataset.busy) return;
+  el.dataset.busy = 1; setTimeout(() => delete el.dataset.busy, 700);
+  const now = performance.now();
+  scramblers.filter((s) => el.contains(s.node)).forEach((s) => {
+    for (let i = 0; i < s.res.length; i++) s.res[i] = now + Math.random() * 350;
+    s.done = false;
+  });
+});
+
+let runId = 0;
+function finish(instant) {
+  runId++;
+  const now = performance.now();
+  if (instant) scramblers.forEach((s) => s.res.fill(0));
+  scramblers.forEach((s) => { s.done = false; });
+  document.querySelector('.avatar').classList.remove('enc-img');
+  boot.classList.add('hide'); scan.style.opacity = 0;
+  document.body.classList.remove('intro');
+  skipBtn.style.display = 'none'; replayBtn.classList.add('show');
+  pct.textContent = '100%';
+  pill.innerHTML = '✓ <b>decrypted</b> · AES-256 · welcome';
+  setTimeout(() => pill.classList.add('hide'), instant ? 0 : 1800);
+  // anything still in view but untouched gets resolved now
+  scramblers.forEach((s) => {
+    const r = s.el.getBoundingClientRect();
+    if (s.res[0] === Infinity && r.top < innerHeight && r.bottom > 0) trigger(s, now, 400);
+  });
+}
+
+async function typeBoot(lines, id) {
+  bootbox.innerHTML = '';
+  for (const [text, cls, ms] of lines) {
+    if (id !== runId) return;
+    const d = document.createElement('div'); d.className = cls || ''; bootbox.appendChild(d);
+    for (let i = 0; i <= text.length; i += 2) { d.textContent = text.slice(0, i); await wait(8); }
+    d.textContent = text;
+    await wait(ms);
+  }
+}
+
+async function run() {
+  const id = ++runId;
+  window.scrollTo(0, 0);
+  document.body.classList.add('intro');
+  scrambleAll();
+  boot.classList.remove('hide');
+  pill.innerHTML = 'decrypting… <b id="pct">0%</b>';
+  skipBtn.style.display = ''; replayBtn.classList.remove('show');
+  if (prefersReducedMotion()) return finish(true);
+
+  await typeBoot([
+    ['$ ssh visitor@brayden.dev', 'cmd', 220],
+    ['establishing secure channel … TLS 1.3 ✓', 'ok', 160],
+    ['verifying identity … Brayden Reuter ✓', 'ok', 160],
+    ['decrypting portfolio', '', 0],
+  ], id);
+  if (id !== runId) return;
+  const bar = document.createElement('div'); bar.className = 'bar'; bar.innerHTML = '<i></i>'; bootbox.appendChild(bar);
+  await bar.firstChild.animate([{ width: '0%' }, { width: '100%' }], { duration: 450, easing: 'ease-in', fill: 'forwards' }).finished;
+  if (id !== runId) return;
+
+  boot.classList.add('hide');
+  const pillEl = document.getElementById('pill'); pillEl.classList.remove('hide');
+  const pctEl = document.getElementById('pct');
+  scan.style.opacity = 1;
+
+  // sweep the scan line down the viewport, triggering text as it passes
+  const DUR = 1500, start = performance.now(), vh = innerHeight;
+  const rects = scramblers.map((s) => s.el.getBoundingClientRect().top);
+  await new Promise((resolve) => {
+    (function sweep(now) {
+      if (id !== runId) return resolve();
+      const p = Math.min(1, (now - start) / DUR);
+      const e = 1 - Math.pow(1 - p, 2);
+      const y = e * (vh + 40);
+      scan.style.transform = `translateY(${y}px)`;
+      scramblers.forEach((s, i) => { if (s.res[0] === Infinity && rects[i] < y) trigger(s, now); });
+      if (p > .25) document.querySelector('.avatar').classList.remove('enc-img');
+      pctEl.textContent = Math.round(e * 100) + '%';
+      if (p < 1) requestAnimationFrame(sweep); else resolve();
+    })(start);
+  });
+  if (id !== runId) return;
+  await wait(500);
+  if (id !== runId) return;
+  finish(false);
+}
+
+skipBtn.addEventListener('click', () => finish(true));
+replayBtn.addEventListener('click', run);
+scrambleAll();
+document.fonts.ready.then(run);
+</script>
+</body>
+</html>
