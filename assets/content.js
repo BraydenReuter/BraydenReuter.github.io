@@ -1,4 +1,3 @@
-// Shared portfolio content so all three prototypes end on the same page.
 window.renderSite = function (root) {
   const chips = (list) => `<div class="chips">${list.map((c) => `<span class="chip">${c}</span>`).join('')}</div>`;
 
@@ -41,12 +40,8 @@ window.renderSite = function (root) {
       <div class="sec-head"><span class="num">01</span><h2>About</h2></div>
       <div class="about">
         <div class="about-text">
-          <p>Hi! I'm Brayden Reuter, a Computer Science student at Randolph College pursuing my Bachelor of Science with a minor in Mathematics, expected to graduate in May 2027.</p>
-          <p>I've always had a passion for technology, especially programming, algorithms, and problem-solving. I enjoy understanding how things work, finding ways to improve them, and turning ideas into functional applications.</p>
-          <p>My experience spans software development, web hosting, automation, and game development. During my internship at CloudFit Software, I gained hands-on experience developing internal tools and collaborating on real-world software solutions. Outside of work, I've developed projects such as Outfit Picker, a full-stack digital wardrobe application with AI-powered image processing, and a Roblox game built using Lua. I also founded and operated Ghost Host, a small website hosting business that gave me valuable experience in web development, deployment, and managing technical services.</p>
-          <p>Beyond development, I've worked as a Computer Science tutor, helping other students better understand programming concepts and strengthen their problem-solving skills.</p>
-          <p>I'm particularly interested in pursuing a career in software engineering or cloud infrastructure. I'm currently working toward my Microsoft Azure Fundamentals and AWS Solutions Architect – Associate certifications to further develop my understanding of cloud technologies.</p>
-          <p>Above all, I'm someone who genuinely enjoys learning, taking on new challenges, and continuously improving my technical skills. As I approach graduation, I'm excited to apply my experience, contribute to meaningful projects, and continue growing as a professional in the technology industry.</p>
+          <p>I'm a Computer Science student at Randolph College (B.S., Math minor), graduating in May 2027. I like building things people actually use. At CloudFit Software I built three internal tools as a software developer intern, and on my own I built Outfit Picker, a wardrobe app with in-browser AI background removal that's live online.</p>
+          <p>I also tutor CS students at Randolph and previously ran Ghost Host, a small web hosting business. I'm looking for software engineering or cloud infrastructure roles starting in 2027 and am studying for the AZ-900 and AWS Solutions Architect – Associate exams.</p>
         </div>
         <aside class="facts">
           <div class="fact"><span>based in</span><b>Lynchburg, VA</b></div>
@@ -62,7 +57,7 @@ window.renderSite = function (root) {
       <div class="sec-head"><span class="num">02</span><h2>Experience</h2><span class="svc-tag">● experience-svc · healthy</span></div>
       <div class="timeline">
         <div class="job">
-          <div class="when">Jun 2026 – Present</div>
+          <div class="when">Jun 2026 – August 2026</div>
           <div><h3>CloudFit Software</h3><div class="role">Software Developer Intern · Lynchburg, VA</div>
           <p>Building internal automation tools in C#, TypeScript and JSON with database integrations to streamline security workflows and cut manual processing. Part of the team behind a company-wide app employees use every day.</p></div>
         </div>
@@ -72,9 +67,19 @@ window.renderSite = function (root) {
           <p>Started and ran a website hosting business: built prototype sites, deployed client sites and handled ongoing hosting updates, working directly with customers to turn requirements into working configurations.</p></div>
         </div>
         <div class="job">
+          <div class="when">August 2026 – Present</div>
+          <div><h3>Randolph College</h3><div class="role">Computer Science Tutor · Lynchburg, VA</div>
+          <p> Tutor students in programming fundamentals, data structures, algorithms and debugging.</p></div>
+        </div>
+        <div class="job">
           <div class="when">Oct 2025 – Jun 2026</div>
-          <div><h3>Best Buy &amp; Target</h3><div class="role">Tech Sales Associate · Lynchburg, VA</div>
-          <p>Translated technical specs into plain-English recommendations, compared devices and troubleshot problems for customers in a fast-paced retail setting.</p></div>
+          <div><h3>Best Buy</h3><div class="role">Tech Sales Person · Lynchburg, VA</div>
+          <p>Provided personalized technology recommendations by assessing customer needs, explaining product features, and guiding purchasing decisions to deliver effective solutions.</p></div>
+        </div>
+        <div class="job">
+          <div class="when">September 2026 – Present</div>
+          <div><h3>Target</h3><div class="role">Tech Sales Associate · Lynchburg, VA</div>
+          <p>Assisted customers in identifying technology products that best suited their needs, providing knowledgeable recommendations and guidance on product features and functionality.</p></div>
         </div>
       </div>
     </div></section>
@@ -82,13 +87,14 @@ window.renderSite = function (root) {
     <section id="projects"><div class="wrap">
       <div class="sec-head"><span class="num">03</span><h2>Projects</h2><span class="svc-tag">● projects-svc · healthy</span></div>
       <div class="projects">
-        <a class="proj" href="https://github.com/BraydenReuter/outfit-picker" target="_blank" rel="noopener">
+        <div class="proj">
           <div class="kicker">full-stack · ai</div>
           <h3>Outfit Picker</h3>
-          <p>A digital wardrobe with searchable inventory, multi-field filters and a saved-outfit builder. An Express/Prisma API on SQLite talks to a Python FastAPI service that runs BiRefNet locally to remove photo backgrounds with AI.</p>
-          ${chips(['React', 'TypeScript', 'Express', 'Prisma', 'SQLite', 'FastAPI', 'PyTorch'])}
-          <span class="link">github.com/BraydenReuter/outfit-picker →</span>
-        </a>
+          <p>A digital wardrobe with search, multi-field filters and a saved-outfit builder. AI background removal runs right in the browser (ONNX), and an Express/Prisma API stores clothing and photos in PostgreSQL. Deployed as a public demo on Render.</p>
+          ${chips(['React', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'ONNX Runtime'])}
+          <a class="link" href="https://outfit-picker-fomc.onrender.com/" target="_blank" rel="noopener">Live demo →</a>
+          <a class="link" href="https://github.com/BraydenReuter/outfit-picker" target="_blank" rel="noopener">Source on GitHub →</a>
+        </div>
         <div class="proj">
           <div class="kicker">game dev</div>
           <h3>Craft a Tycoon</h3>
@@ -101,9 +107,9 @@ window.renderSite = function (root) {
     <section id="skills"><div class="wrap">
       <div class="sec-head"><span class="num">04</span><h2>Skills</h2><span class="svc-tag">● skills-svc · healthy</span></div>
       <div class="skills">
-        <div class="skill-group"><h3>languages</h3>${chips(['C#', 'Java', 'JavaScript', 'TypeScript', 'Python', 'Lua/Luau'])}</div>
-        <div class="skill-group"><h3>frameworks</h3>${chips(['React', 'Node.js', 'Express', '.NET', 'FastAPI', 'PyTorch', 'Prisma', 'Zod'])}</div>
-        <div class="skill-group"><h3>cloud &amp; tools</h3>${chips(['Azure', 'Git/GitHub', 'REST APIs', 'SQLite', 'JSON', 'Roblox Studio'])}</div>
+        <div class="skill-group"><h3>languages</h3>${chips(['C#', 'TypeScript', 'JavaScript', 'Python', 'Java', 'Lua/Luau', 'SQL'])}</div>
+        <div class="skill-group"><h3>frameworks</h3>${chips(['React', 'Node.js', 'Express', '.NET', 'Prisma', 'Zod', 'Vite'])}</div>
+        <div class="skill-group"><h3>cloud &amp; tools</h3>${chips(['Azure', 'AWS', 'Git/GitHub', 'PostgreSQL','SQLite', 'JSON', 'Roblox Studio', 'Render'])}</div>
       </div>
       <p class="certs"><b>In progress:</b> Microsoft Azure Fundamentals (AZ-900) · AWS Solutions Architect – Associate (SAA-C03)</p>
     </div></section>
@@ -114,6 +120,7 @@ window.renderSite = function (root) {
       <div class="cta">
         <a class="btn primary" href="mailto:reuterbg@gmail.com">reuterbg@gmail.com</a>
         <a class="btn" href="https://github.com/BraydenReuter" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/brayden-reuter-56a34328a/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div></section>
 
