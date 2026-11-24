@@ -109,7 +109,7 @@ window.renderSite = function (root) {
       <div class="skills">
         <div class="skill-group"><h3>languages</h3>${chips(['C#', 'TypeScript', 'JavaScript', 'Python', 'Java', 'Lua/Luau', 'SQL'])}</div>
         <div class="skill-group"><h3>frameworks</h3>${chips(['React', 'Node.js', 'Express', '.NET', 'Prisma', 'Zod', 'Vite'])}</div>
-        <div class="skill-group"><h3>cloud &amp; tools</h3>${chips(['Azure', 'AWS', 'Git/GitHub', 'PostgreSQL','SQLite', 'JSON', 'Roblox Studio', 'Render'])}</div>
+        <div class="skill-group"><h3>cloud &amp; tools</h3>${chips(['Azure', 'AWS', 'Kubernetes', 'Git/GitHub', 'PostgreSQL','SQLite', 'JSON', 'Roblox Studio', 'Render'])}</div>
       </div>
       <p class="certs"><b>In progress:</b> Microsoft Azure Fundamentals (AZ-900) · AWS Solutions Architect – Associate (SAA-C03)</p>
     </div></section>
